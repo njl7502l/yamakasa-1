@@ -1,0 +1,5 @@
+(fp_lib_table
+  (lib (name "njl7502l-footprints")(type "KiCad")(uri "${KIPRJMOD}/njl7502l-kicad-library/njl7502l-footprints/njl7502l-footprints.pretty")(options "")(descr ""))
+  (lib (name "digikey-footprints")(type "KiCad")(uri "${KIPRJMOD}/digikey-kicad-library/digikey-footprints.pretty")(options "")(descr ""))
+  (lib (name "espressif-footprints")(type "KiCad")(uri "${KIPRJMOD}/espressif-kicad-library/footprints/Espressif.pretty")(options "")(descr ""))
+)

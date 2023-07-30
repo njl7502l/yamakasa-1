@@ -1,0 +1,123 @@
+#!/bin/zsh
+
+echo "########################################################"
+echo "\n"
+echo "Start initialization..."
+echo "\n"
+
+DEFAULT_NAME="Untitled"
+CURRENT=$(cd $(dirname $0);pwd)
+DIR_NAME=`echo "$CURRENT" | sed -e 's/.*\/\([^\/]*\)$/\1/'`
+
+EXTENSIONS=(".kicad_pro" ".kicad_sch" ".kicad_pcb")
+echo "--------------------------------------------------------"
+echo "1 : Rename Files"
+
+for EXTENSION in ${EXTENSIONS[@]}
+do
+  ORIGIN="$DEFAULT_NAME$EXTENSION"
+  UPDATE="$DIR_NAME$EXTENSION"
+  echo "ORIGIN: $ORIGIN"
+  echo "UPDATE: $UPDATE"
+  git mv "$ORIGIN" "$UPDATE"
+done
+if test $# -lt 1 || test 'no-push' != $1 ;then
+  git add .
+  git commit -m 'zsh init: rename files'
+fi
+echo "\n"
+
+echo "--------------------------------------------------------"
+echo "2 : Git Submodule add Kicad"
+
+git submodule add -f git@github.com:njl7502l/njl7502l-kicad-library.git
+if test $# -lt 1 || test 'no-push' != $1 ;then
+  git add .
+  git commit -m 'zsh init: add submodule kicad'
+fi
+echo "\n"
+
+echo "--------------------------------------------------------"
+echo "3 : Git Submodule add Digikey"
+
+git submodule add -f git@github.com:Digi-Key/digikey-kicad-library.git
+if test $# -lt 1 || test 'no-push' != $1 ;then
+  git add .
+  git commit -m 'zsh init: add submodule digikey'
+fi
+echo "\n"
+
+echo "--------------------------------------------------------"
+echo "3 : Git Submodule add Espressif"
+
+git submodule add -f git@github.com:espressif/kicad-libraries.git espressif-kicad-library
+if test $# -lt 1 || test 'no-push' != $1 ;then
+  git add .
+  git commit -m 'zsh init: add submodule digikey'
+fi
+echo "\n"
+
+echo "--------------------------------------------------------"
+echo "4 : edit sym-lib-table Digikey"
+
+count=0
+sed -i "" -e '$d' sym-lib-table
+find digikey-kicad-library/digikey-symbols -maxdepth 1 -name "*.lib" | while read -r fname
+do
+  fname_ext="${fname##*/}"
+  name="${fname_ext%.*}"
+  echo -n '.'
+  count=`expr $count + 1`
+  if (( $count % 10 == 0 )); then
+    echo $count
+  fi
+  echo "  (lib (name \"$name\")(type \"Legacy\")(uri \"\${KIPRJMOD}/$fname\")(options \"\")(descr \"\"))" >> sym-lib-table
+done
+echo ")" >> sym-lib-table
+echo "add $count libs DONE."
+if test $# -lt 1 || test 'no-push' != $1 ;then
+  git add .
+  git commit -m 'zsh init: edit sym-lib-table digikey'
+fi
+echo "\n"
+
+echo "--------------------------------------------------------"
+echo "5 : edit readme"
+
+rm README.md
+touch README.md
+echo "# $DIR_NAME" >> README.md
+if test $# -lt 1 || test 'no-push' != $1 ;then
+  git add .
+  git commit -m 'zsh init: edit readme'
+fi
+echo "\n"
+
+echo "--------------------------------------------------------"
+echo "6 : mkdir gbr dsn"
+
+mkdir gbr
+mkdir dsn
+echo "\n"
+
+echo "--------------------------------------------------------"
+echo "7 : rm init file"
+
+rm init
+if test $# -lt 1 || test 'no-push' != $1 ;then
+  git add .
+  git commit -m 'zsh init: rm init'
+fi
+echo "\n"
+
+if test $# -lt 1 || test 'no-push' != $1 ;then
+  echo "--------------------------------------------------------"
+  echo "8 : Git push"
+
+  git push origin head
+  echo "\n"
+  
+fi
+echo "--------------------------------------------------------"
+echo "DONE!!"
+echo "########################################################"
