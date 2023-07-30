@@ -1,0 +1,3 @@
+[submodule "njl7502l-kicad-library"]
+	path = njl7502l-kicad-library
+	url = git@github.com:njl7502l/njl7502l-kicad-library.git
