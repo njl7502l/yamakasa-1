@@ -4,3 +4,6 @@
 [submodule "digikey-kicad-library"]
 	path = digikey-kicad-library
 	url = git@github.com:Digi-Key/digikey-kicad-library.git
+[submodule "espressif-kicad-library"]
+	path = espressif-kicad-library
+	url = git@github.com:espressif/kicad-libraries.git
