@@ -1,3 +1,6 @@
 [submodule "njl7502l-kicad-library"]
 	path = njl7502l-kicad-library
 	url = git@github.com:njl7502l/njl7502l-kicad-library.git
+[submodule "digikey-kicad-library"]
+	path = digikey-kicad-library
+	url = git@github.com:Digi-Key/digikey-kicad-library.git
